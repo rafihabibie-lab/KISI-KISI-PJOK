@@ -84,13 +84,23 @@
   .fc-controls select{background:var(--card2);color:var(--text);border:1px solid #334155;
     padding:8px 14px;border-radius:10px;font-size:.9rem}
   .fc-counter{color:var(--muted);font-size:.9rem;margin-left:auto}
-  .flashcard-wrap{perspective:1200px;max-width:560px;margin:0 auto 20px;height:320px;cursor:pointer}
-  .flashcard{position:relative;width:100%;height:100%;transition:transform .6s;
-    transform-style:preserve-3d}
+  .flashcard-wrap{
+    perspective:1200px;max-width:560px;margin:0 auto 20px;
+    height:320px;cursor:pointer;position:relative;
+  }
+  .flashcard{
+    position:relative;width:100%;height:100%;transition:transform .6s;
+    transform-style:preserve-3d;
+  }
   .flashcard.flipped{transform:rotateY(180deg)}
-  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;
-    display:flex;flex-direction:column;justify-content:center;align-items:center;
-    padding:30px;text-align:center;border:1px solid #334155}
+  .fc-face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:20px;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;padding:30px;
+    text-align:center;border:1px solid #334155;
+    pointer-events:none;
+  }
   .fc-front{background:linear-gradient(135deg,#1e293b,#273449)}
   .fc-back{background:linear-gradient(135deg,#1e3a8a,#312e81);transform:rotateY(180deg)}
   .fc-face .fc-label{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;
@@ -98,7 +108,7 @@
   .fc-face .fc-text{font-size:1.15rem;font-weight:600}
   .fc-back .fc-text{font-size:1rem;font-weight:400;line-height:1.6}
   .fc-hint{font-size:.8rem;color:var(--muted);margin-top:18px}
-  .fc-nav{display:flex;justify-content:center;gap:12px;margin-top:8px}
+  .fc-nav{display:flex;justify-content:center;gap:12px;margin-top:8px;flex-wrap:wrap}
   .btn{background:linear-gradient(135deg,#38bdf8,#818cf8);border:none;color:#fff;
     padding:10px 22px;border-radius:12px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.25s}
   .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,.35)}
@@ -111,7 +121,7 @@
   .progress-bar{height:8px;background:#1e293b;border-radius:50px;overflow:hidden;margin-top:8px}
   .progress-fill{height:100%;background:linear-gradient(90deg,#34d399,#38bdf8);
     width:0%;transition:width .4s;border-radius:50px}
-  .quiz-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted)}
+  .quiz-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);flex-wrap:wrap;gap:8px}
   .question-card{background:var(--card);border:1px solid #2c3e57;border-radius:var(--radius);
     padding:24px;margin-bottom:18px}
   .q-number{display:inline-block;background:rgba(129,140,248,.15);color:var(--accent2);
@@ -443,9 +453,9 @@
   </div>
 
   <div class="fc-nav">
-    <button class="btn btn-ghost" id="fcPrev">← Sebelumnya</button>
-    <button class="btn" id="fcFlip">🔄 Balik Kartu</button>
-    <button class="btn btn-ghost" id="fcNext">Selanjutnya →</button>
+    <button class="btn btn-ghost" id="fcPrev" type="button">← Sebelumnya</button>
+    <button class="btn" id="fcFlip" type="button">🔄 Balik Kartu</button>
+    <button class="btn btn-ghost" id="fcNext" type="button">Selanjutnya →</button>
   </div>
 </section>
 
@@ -495,28 +505,24 @@ navButtons.forEach(btn=>{
 
 /* ============ FLASHCARD DATA ============ */
 const flashcards = [
-  // Kebugaran (6)
   {cat:'kebugaran',q:'Apa itu kebugaran jasmani?',a:'Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan dan masih memiliki cadangan energi.'},
   {cat:'kebugaran',q:'Sebutkan komponen kebugaran terkait keterampilan!',a:'Daya tahan jantung-paru, kekuatan otot, daya ledak, kecepatan, kelincahan, kelenturan, koordinasi.'},
   {cat:'kebugaran',q:'Apa kepanjangan FITT?',a:'Frequency, Intensity, Time, Type — prinsip dasar penyusunan program latihan.'},
   {cat:'kebugaran',q:'Urutan latihan yang benar?',a:'Pemanasan (5–10 menit) → Latihan inti → Pendinginan.'},
   {cat:'kebugaran',q:'Apa itu prinsip overload?',a:'Beban/intensitas latihan ditingkatkan secara bertahap agar tubuh beradaptasi.'},
   {cat:'kebugaran',q:'Apa itu reversibility?',a:'Kebugaran akan menurun jika latihan berhenti — "use it or lose it".'},
-  // Senam (6)
   {cat:'senam',q:'Kunci gerakan guling depan?',a:'Dagu menempel dada, tengkuk menyentuh matras lebih dulu (bukan kepala atas).'},
   {cat:'senam',q:'Urutan berguling pada guling depan?',a:'Tengkuk → punggung → pinggang → panggul → jongkok.'},
   {cat:'senam',q:'Posisi tangan saat guling belakang?',a:'Di samping telinga, siap mendorong matras saat punggung menyentuh.'},
   {cat:'senam',q:'Tumpuan sikap lilin yang benar?',a:'Bahu dan tengkuk (bukan leher langsung), pinggang ditopang kedua tangan.'},
   {cat:'senam',q:'Kesalahan handstand?',a:'Siku bengkok dan tumpuan tidak di telapak tangan penuh.'},
   {cat:'senam',q:'Apa itu spotting?',a:'Bantuan pengawasan/pengamanan oleh guru atau teman terlatih saat melakukan gerakan senam.'},
-  // Sepak bola (6)
   {cat:'sepakbola',q:'Posisi kaki tumpu saat passing?',a:'Di samping bola, lutut sedikit ditekuk, pandangan ke target.'},
   {cat:'sepakbola',q:'Cara meredam bola saat kontrol?',a:'Tarik kaki sedikit ke belakang saat kontak bola untuk mengurangi pantulan.'},
   {cat:'sepakbola',q:'Kesalahan dribbling?',a:'Kepala terus menunduk melihat bola → kehilangan pandangan lapangan.'},
   {cat:'sepakbola',q:'Perkenaan kaki untuk shooting keras?',a:'Punggung kaki (power), sedangkan kaki dalam untuk akurasi.'},
   {cat:'sepakbola',q:'Kontak heading yang benar?',a:'Dahi, mata ke bola, leher kaku, badan seimbang.'},
   {cat:'sepakbola',q:'Sebutkan formasi sepak bola!',a:'4-4-2, 4-3-3, 3-5-2 (sesuaikan kekuatan tim).'},
-  // Lembing (6)
   {cat:'lembing',q:'Gaya pegangan lembing?',a:'Gaya Amerika, Gaya Finlandia, Gaya Penjepit (Tang).'},
   {cat:'lembing',q:'Ciri Gaya Amerika?',a:'Ibu jari & telunjuk di ujung lilitan; kekuatan pada telunjuk & ibu jari.'},
   {cat:'lembing',q:'Ciri Gaya Finlandia?',a:'Ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah; kekuatan pada ibu jari & jari tengah.'},
@@ -528,33 +534,63 @@ const flashcards = [
 let fcFiltered = [...flashcards];
 let fcIndex = 0;
 
-const fcEl = document.getElementById('flashcard');
-const fcFront = document.getElementById('fcFront');
-const fcBack = document.getElementById('fcBack');
-const fcCatLabel = document.getElementById('fcCatLabel');
-const fcCounter = document.getElementById('fcCounter');
+const fcEl        = document.getElementById('flashcard');
+const fcWrap      = document.getElementById('flashcardWrap');
+const fcFront     = document.getElementById('fcFront');
+const fcBack      = document.getElementById('fcBack');
+const fcCatLabel  = document.getElementById('fcCatLabel');
+const fcCounter   = document.getElementById('fcCounter');
 const catNames = {kebugaran:'Kebugaran Jasmani',senam:'Senam Lantai',sepakbola:'Sepak Bola',lembing:'Lempar Lembing'};
 
 function renderFlashcard(){
   const c = fcFiltered[fcIndex];
   fcCatLabel.textContent = catNames[c.cat];
   fcFront.textContent = c.q;
-  fcBack.textContent = c.a;
+  fcBack.textContent  = c.a;
   fcCounter.textContent = `${fcIndex+1} / ${fcFiltered.length}`;
   fcEl.classList.remove('flipped');
 }
-function nextCard(){fcIndex=(fcIndex+1)%fcFiltered.length;renderFlashcard();}
-function prevCard(){fcIndex=(fcIndex-1+fcFiltered.length)%fcFiltered.length;renderFlashcard();}
 
-document.getElementById('fcFlip').addEventListener('click',()=>fcEl.classList.toggle('flipped'));
-fcEl.addEventListener('click',()=>fcEl.classList.toggle('flipped'));
-document.getElementById('fcNext').addEventListener('click',nextCard);
-document.getElementById('fcPrev').addEventListener('click',prevCard);
-document.getElementById('fcCategory').addEventListener('change',e=>{
-  const v=e.target.value;
-  fcFiltered = v==='all'?[...flashcards]:flashcards.filter(f=>f.cat===v);
-  fcIndex=0;renderFlashcard();
+function flipCard(e){
+  if(e) e.stopPropagation();
+  fcEl.classList.toggle('flipped');
+}
+function nextCard(e){
+  if(e) e.stopPropagation();
+  fcIndex = (fcIndex + 1) % fcFiltered.length;
+  renderFlashcard();
+}
+function prevCard(e){
+  if(e) e.stopPropagation();
+  fcIndex = (fcIndex - 1 + fcFiltered.length) % fcFiltered.length;
+  renderFlashcard();
+}
+
+/* Klik area kartu membalik — pasang di WRAPPER */
+fcWrap.addEventListener('click', flipCard);
+
+/* Tombol kontrol */
+document.getElementById('fcFlip').addEventListener('click', flipCard);
+document.getElementById('fcNext').addEventListener('click', nextCard);
+document.getElementById('fcPrev').addEventListener('click', prevCard);
+
+/* Filter kategori */
+document.getElementById('fcCategory').addEventListener('change', e=>{
+  const v = e.target.value;
+  fcFiltered = v === 'all' ? [...flashcards] : flashcards.filter(f => f.cat === v);
+  fcIndex = 0;
+  renderFlashcard();
 });
+
+/* Keyboard: spasi/enter untuk balik, panah untuk navigasi */
+document.addEventListener('keydown', e=>{
+  const fcSection = document.getElementById('flashcard');
+  if(!fcSection.classList.contains('active')) return;
+  if(e.code === 'Space'){ e.preventDefault(); flipCard(); }
+  if(e.code === 'ArrowRight') nextCard();
+  if(e.code === 'ArrowLeft')  prevCard();
+});
+
 renderFlashcard();
 
 /* ============ QUIZ DATA (40 SOAL) ============ */
@@ -653,7 +689,7 @@ function handleAnswer(e){
   if(oIdx === correct){
     opt.classList.add('correct');
     correctCount++;
-    score += 2.5; // 40 soal x 2.5 = 100
+    score += 2.5;
   } else {
     opt.classList.add('wrong');
     options[correct].classList.add('correct');
