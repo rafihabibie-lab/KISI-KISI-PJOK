@@ -79,41 +79,53 @@
   .ringkas-table th{background:#1e3a8a55;color:var(--accent)}
   .ringkas-table tr:nth-child(even){background:#1a2438}
   .scroll-x{overflow-x:auto}
-  /* ===== FLASHCARD ===== */
-  .fc-controls{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-  .fc-controls select{background:var(--card2);color:var(--text);border:1px solid #334155;
-    padding:8px 14px;border-radius:10px;font-size:.9rem}
-  .fc-counter{color:var(--muted);font-size:.9rem;margin-left:auto}
-  .flashcard-wrap{
-    perspective:1200px;max-width:560px;margin:0 auto 20px;
-    height:320px;cursor:pointer;position:relative;
+  /* ===== KUNCI HAFALAN CEPAT ===== */
+  .hafalan-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+  @media(max-width:800px){.hafalan-grid{grid-template-columns:1fr}}
+  .hafalan-box{
+    background:linear-gradient(145deg,#1e293b,#1a2438);
+    border:1px solid #2c3e57;border-radius:var(--radius);
+    overflow:hidden;transition:.3s;
   }
-  .flashcard{
-    position:relative;width:100%;height:100%;transition:transform .6s;
-    transform-style:preserve-3d;
+  .hafalan-box:hover{border-color:#3b5273}
+  .hafalan-header{
+    display:flex;align-items:center;gap:12px;padding:16px 18px;
+    cursor:pointer;user-select:none;transition:.2s;
+    border-bottom:1px solid transparent;
   }
-  .flashcard.flipped{transform:rotateY(180deg)}
-  .fc-face{
-    position:absolute;inset:0;backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-    border-radius:20px;display:flex;flex-direction:column;
-    justify-content:center;align-items:center;padding:30px;
-    text-align:center;border:1px solid #334155;
-    pointer-events:none;
+  .hafalan-header:hover{background:rgba(56,189,248,.06)}
+  .hafalan-box.open .hafalan-header{border-bottom-color:#2c3e57}
+  .hafalan-icon{
+    width:38px;height:38px;flex-shrink:0;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+    background:linear-gradient(135deg,rgba(56,189,248,.2),rgba(129,140,248,.2));
   }
-  .fc-front{background:linear-gradient(135deg,#1e293b,#273449)}
-  .fc-back{background:linear-gradient(135deg,#1e3a8a,#312e81);transform:rotateY(180deg)}
-  .fc-face .fc-label{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;
-    color:var(--accent);margin-bottom:14px}
-  .fc-face .fc-text{font-size:1.15rem;font-weight:600}
-  .fc-back .fc-text{font-size:1rem;font-weight:400;line-height:1.6}
-  .fc-hint{font-size:.8rem;color:var(--muted);margin-top:18px}
-  .fc-nav{display:flex;justify-content:center;gap:12px;margin-top:8px;flex-wrap:wrap}
-  .btn{background:linear-gradient(135deg,#38bdf8,#818cf8);border:none;color:#fff;
-    padding:10px 22px;border-radius:12px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.25s}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,.35)}
-  .btn-ghost{background:transparent;border:1px solid #334155;color:var(--muted)}
-  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);box-shadow:none;transform:none}
+  .hafalan-title{font-weight:700;font-size:1rem;flex:1}
+  .hafalan-title small{display:block;font-weight:400;font-size:.75rem;color:var(--muted);margin-top:2px}
+  .hafalan-toggle{
+    font-size:1.2rem;color:var(--accent);transition:transform .3s;flex-shrink:0;
+  }
+  .hafalan-box.open .hafalan-toggle{transform:rotate(45deg)}
+  .hafalan-body{
+    max-height:0;overflow:hidden;transition:max-height .4s ease;
+  }
+  .hafalan-box.open .hafalan-body{max-height:1200px}
+  .hafalan-content{padding:16px 18px 20px}
+  .hafalan-item{
+    background:#1a2438;border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:8px;margin-bottom:10px;font-size:.88rem;
+  }
+  .hafalan-item:last-child{margin-bottom:0}
+  .hafalan-item strong{color:var(--accent);display:block;margin-bottom:3px;font-size:.85rem}
+  .hafalan-item .hl-key{color:var(--green);font-weight:600}
+  .hafalan-item .hl-warn{color:var(--red);font-weight:600}
+  .hafalan-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .mini-btn{
+    background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);
+    color:var(--accent);padding:6px 14px;border-radius:8px;cursor:pointer;
+    font-size:.8rem;font-weight:600;transition:.2s;
+  }
+  .mini-btn:hover{background:rgba(56,189,248,.22);transform:translateY(-1px)}
   /* ===== QUIZ ===== */
   .quiz-progress{position:sticky;top:60px;z-index:50;background:rgba(15,23,42,.95);
     backdrop-filter:blur(8px);padding:12px 16px;border-radius:12px;margin-bottom:20px;
@@ -166,7 +178,7 @@
 <nav id="nav">
   <button class="active" data-target="materi">📚 Materi Detail</button>
   <button data-target="ringkas">⚡ Kunci Ringkas</button>
-  <button data-target="flashcard">🃏 Flashcard</button>
+  <button data-target="hafalan">🧠 Kunci Hafalan Cepat</button>
   <button data-target="kuis">📝 Kuis (40 Soal)</button>
 </nav>
 
@@ -422,320 +434,29 @@
   </div>
 </section>
 
-<!-- ================= FLASHCARD ================= -->
-<section id="flashcard">
-  <h2 class="section-title">Flashcard Hafalan</h2>
-  <p class="section-sub">Klik kartu untuk membalik. Pilih kategori atau campur semua.</p>
+<!-- ================= KUNCI HAFALAN CEPAT ================= -->
+<section id="hafalan">
+  <h2 class="section-title">Kunci Hafalan Cepat</h2>
+  <p class="section-sub">Kotak ringkas per materi — klik untuk membuka/menutup. Cocok untuk hafalan kilat sebelum ujian.</p>
 
-  <div class="fc-controls">
-    <select id="fcCategory">
-      <option value="all">🔀 Semua Kategori</option>
-      <option value="kebugaran">💪 Kebugaran Jasmani</option>
-      <option value="senam">🤸 Senam Lantai</option>
-      <option value="sepakbola">⚽ Sepak Bola</option>
-      <option value="lembing">🎯 Lempar Lembing</option>
-    </select>
-    <span class="fc-counter" id="fcCounter">1 / 24</span>
+  <div class="hafalan-actions" style="margin-bottom:20px">
+    <button class="mini-btn" onclick="openAllHafalan()">📂 Buka Semua</button>
+    <button class="mini-btn" onclick="closeAllHafalan()">📁 Tutup Semua</button>
   </div>
 
-  <div class="flashcard-wrap" id="flashcardWrap">
-    <div class="flashcard" id="flashcard">
-      <div class="fc-face fc-front">
-        <div class="fc-label" id="fcCatLabel">Kategori</div>
-        <div class="fc-text" id="fcFront">Pertanyaan muncul di sini</div>
-        <div class="fc-hint">👆 Klik untuk melihat jawaban</div>
+  <div class="hafalan-grid">
+
+    <!-- KEBUGARAN -->
+    <div class="hafalan-box open" data-hafalan>
+      <div class="hafalan-header">
+        <div class="hafalan-icon">💪</div>
+        <div class="hafalan-title">Kebugaran Jasmani<small>Komponen, FITT, urutan latihan</small></div>
+        <div class="hafalan-toggle">+</div>
       </div>
-      <div class="fc-face fc-back">
-        <div class="fc-label">Jawaban</div>
-        <div class="fc-text" id="fcBack">Jawaban muncul di sini</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="fc-nav">
-    <button class="btn btn-ghost" id="fcPrev" type="button">← Sebelumnya</button>
-    <button class="btn" id="fcFlip" type="button">🔄 Balik Kartu</button>
-    <button class="btn btn-ghost" id="fcNext" type="button">Selanjutnya →</button>
-  </div>
-</section>
-
-<!-- ================= KUIS ================= -->
-<section id="kuis">
-  <h2 class="section-title">Kuis Interaktif — 40 Soal</h2>
-  <p class="section-sub">Pilih jawaban yang benar. Pembahasan muncul setelah menjawab.</p>
-
-  <div class="quiz-progress">
-    <div class="quiz-meta">
-      <span>Terjawab: <strong id="qAnswered">0</strong> / 40</span>
-      <span>Benar: <strong id="qCorrect" style="color:var(--green)">0</strong></span>
-      <span>Skor: <strong id="qScore" style="color:var(--accent)">0</strong></span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="qProgress"></div></div>
-  </div>
-
-  <div id="quizContainer"></div>
-
-  <div class="score-panel" id="scorePanel">
-    <div style="font-size:.85rem;color:var(--accent);letter-spacing:2px">HASIL AKHIR</div>
-    <div class="score-big" id="finalScore">0</div>
-    <div class="score-msg" id="finalMsg"></div>
-    <button class="btn reset-btn" onclick="resetQuiz()">🔄 Ulangi Kuis</button>
-  </div>
-</section>
-
-</div>
-
-<footer>
-  Bahan Ajar SAS PJOK Kelas XI SMA • Analisis Gerakan • Dibuat untuk pembelajaran interaktif
-</footer>
-
-<script>
-/* ============ NAVIGATION ============ */
-const navButtons = document.querySelectorAll('#nav button');
-const sections = document.querySelectorAll('section');
-navButtons.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    navButtons.forEach(b=>b.classList.remove('active'));
-    sections.forEach(s=>s.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.target).classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
-});
-
-/* ============ FLASHCARD DATA ============ */
-const flashcards = [
-  {cat:'kebugaran',q:'Apa itu kebugaran jasmani?',a:'Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan dan masih memiliki cadangan energi.'},
-  {cat:'kebugaran',q:'Sebutkan komponen kebugaran terkait keterampilan!',a:'Daya tahan jantung-paru, kekuatan otot, daya ledak, kecepatan, kelincahan, kelenturan, koordinasi.'},
-  {cat:'kebugaran',q:'Apa kepanjangan FITT?',a:'Frequency, Intensity, Time, Type — prinsip dasar penyusunan program latihan.'},
-  {cat:'kebugaran',q:'Urutan latihan yang benar?',a:'Pemanasan (5–10 menit) → Latihan inti → Pendinginan.'},
-  {cat:'kebugaran',q:'Apa itu prinsip overload?',a:'Beban/intensitas latihan ditingkatkan secara bertahap agar tubuh beradaptasi.'},
-  {cat:'kebugaran',q:'Apa itu reversibility?',a:'Kebugaran akan menurun jika latihan berhenti — "use it or lose it".'},
-  {cat:'senam',q:'Kunci gerakan guling depan?',a:'Dagu menempel dada, tengkuk menyentuh matras lebih dulu (bukan kepala atas).'},
-  {cat:'senam',q:'Urutan berguling pada guling depan?',a:'Tengkuk → punggung → pinggang → panggul → jongkok.'},
-  {cat:'senam',q:'Posisi tangan saat guling belakang?',a:'Di samping telinga, siap mendorong matras saat punggung menyentuh.'},
-  {cat:'senam',q:'Tumpuan sikap lilin yang benar?',a:'Bahu dan tengkuk (bukan leher langsung), pinggang ditopang kedua tangan.'},
-  {cat:'senam',q:'Kesalahan handstand?',a:'Siku bengkok dan tumpuan tidak di telapak tangan penuh.'},
-  {cat:'senam',q:'Apa itu spotting?',a:'Bantuan pengawasan/pengamanan oleh guru atau teman terlatih saat melakukan gerakan senam.'},
-  {cat:'sepakbola',q:'Posisi kaki tumpu saat passing?',a:'Di samping bola, lutut sedikit ditekuk, pandangan ke target.'},
-  {cat:'sepakbola',q:'Cara meredam bola saat kontrol?',a:'Tarik kaki sedikit ke belakang saat kontak bola untuk mengurangi pantulan.'},
-  {cat:'sepakbola',q:'Kesalahan dribbling?',a:'Kepala terus menunduk melihat bola → kehilangan pandangan lapangan.'},
-  {cat:'sepakbola',q:'Perkenaan kaki untuk shooting keras?',a:'Punggung kaki (power), sedangkan kaki dalam untuk akurasi.'},
-  {cat:'sepakbola',q:'Kontak heading yang benar?',a:'Dahi, mata ke bola, leher kaku, badan seimbang.'},
-  {cat:'sepakbola',q:'Sebutkan formasi sepak bola!',a:'4-4-2, 4-3-3, 3-5-2 (sesuaikan kekuatan tim).'},
-  {cat:'lembing',q:'Gaya pegangan lembing?',a:'Gaya Amerika, Gaya Finlandia, Gaya Penjepit (Tang).'},
-  {cat:'lembing',q:'Ciri Gaya Amerika?',a:'Ibu jari & telunjuk di ujung lilitan; kekuatan pada telunjuk & ibu jari.'},
-  {cat:'lembing',q:'Ciri Gaya Finlandia?',a:'Ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah; kekuatan pada ibu jari & jari tengah.'},
-  {cat:'lembing',q:'Sudut lemparan lembing yang optimal?',a:'Sekitar 30–45 derajat.'},
-  {cat:'lembing',q:'Berat lembing putra & putri?',a:'Putra 800 gram (2,60–2,70 m), putri 600 gram (2,20–2,30 m).'},
-  {cat:'lembing',q:'Syarat lemparan sah?',a:'Mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis batas.'},
-];
-
-let fcFiltered = [...flashcards];
-let fcIndex = 0;
-
-const fcEl        = document.getElementById('flashcard');
-const fcWrap      = document.getElementById('flashcardWrap');
-const fcFront     = document.getElementById('fcFront');
-const fcBack      = document.getElementById('fcBack');
-const fcCatLabel  = document.getElementById('fcCatLabel');
-const fcCounter   = document.getElementById('fcCounter');
-const catNames = {kebugaran:'Kebugaran Jasmani',senam:'Senam Lantai',sepakbola:'Sepak Bola',lembing:'Lempar Lembing'};
-
-function renderFlashcard(){
-  const c = fcFiltered[fcIndex];
-  fcCatLabel.textContent = catNames[c.cat];
-  fcFront.textContent = c.q;
-  fcBack.textContent  = c.a;
-  fcCounter.textContent = `${fcIndex+1} / ${fcFiltered.length}`;
-  fcEl.classList.remove('flipped');
-}
-
-function flipCard(e){
-  if(e) e.stopPropagation();
-  fcEl.classList.toggle('flipped');
-}
-function nextCard(e){
-  if(e) e.stopPropagation();
-  fcIndex = (fcIndex + 1) % fcFiltered.length;
-  renderFlashcard();
-}
-function prevCard(e){
-  if(e) e.stopPropagation();
-  fcIndex = (fcIndex - 1 + fcFiltered.length) % fcFiltered.length;
-  renderFlashcard();
-}
-
-/* Klik area kartu membalik — pasang di WRAPPER */
-fcWrap.addEventListener('click', flipCard);
-
-/* Tombol kontrol */
-document.getElementById('fcFlip').addEventListener('click', flipCard);
-document.getElementById('fcNext').addEventListener('click', nextCard);
-document.getElementById('fcPrev').addEventListener('click', prevCard);
-
-/* Filter kategori */
-document.getElementById('fcCategory').addEventListener('change', e=>{
-  const v = e.target.value;
-  fcFiltered = v === 'all' ? [...flashcards] : flashcards.filter(f => f.cat === v);
-  fcIndex = 0;
-  renderFlashcard();
-});
-
-/* Keyboard: spasi/enter untuk balik, panah untuk navigasi */
-document.addEventListener('keydown', e=>{
-  const fcSection = document.getElementById('flashcard');
-  if(!fcSection.classList.contains('active')) return;
-  if(e.code === 'Space'){ e.preventDefault(); flipCard(); }
-  if(e.code === 'ArrowRight') nextCard();
-  if(e.code === 'ArrowLeft')  prevCard();
-});
-
-renderFlashcard();
-
-/* ============ QUIZ DATA (40 SOAL) ============ */
-const quizData = [
-  // ===== KEBUGARAN (10) =====
-  {q:'Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan disebut...',o:['Kebugaran jasmani','Kekuatan otot','Kelincahan','Daya tahan'],a:0,e:'Kebugaran jasmani adalah kemampuan tubuh beraktivitas tanpa kelelahan berlebihan dan masih punya cadangan energi.'},
-  {q:'Prinsip latihan FITT terdiri dari...',o:['Frequency, Intensity, Time, Type','Force, Intensity, Time, Type','Frequency, Individual, Time, Type','Flexibility, Intensity, Training, Type'],a:0,e:'FITT = Frequency (frekuensi), Intensity (intensitas), Time (waktu), Type (jenis latihan).'},
-  {q:'Latihan shuttle run bertujuan melatih...',o:['Kelincahan','Kelenturan','Daya tahan jantung','Kekuatan otot'],a:0,e:'Shuttle run (lari bolak-balik) melatih kelincahan (agility).'},
-  {q:'Urutan latihan yang benar adalah...',o:['Pemanasan → latihan inti → pendinginan','Latihan inti → pemanasan → pendinginan','Pendinginan → pemanasan → inti','Pemanasan → pendinginan → inti'],a:0,e:'Urutan benar: pemanasan → latihan inti → pendinginan.'},
-  {q:'Berikut yang BUKAN kesalahan umum dalam latihan kebugaran adalah...',o:['Melakukan pemanasan sebelum latihan','Beban naik drastis','Tanpa pendinginan','Napas ditahan berlebihan'],a:0,e:'Pemanasan adalah hal yang BENAR dilakukan, bukan kesalahan.'},
-  {q:'Prinsip yang menyatakan kebugaran menurun jika berhenti latihan adalah...',o:['Reversibility','Overload','Spesifisitas','Individual'],a:0,e:'Reversibility: kebugaran menurun jika latihan berhenti (use it or lose it).'},
-  {q:'Tes sit and reach mengukur...',o:['Kelenturan','Kecepatan','Kekuatan','Daya tahan'],a:0,e:'Sit and reach mengukur kelenturan (flexibility) otot punggung dan hamstring.'},
-  {q:'Berikut yang termasuk kebugaran terkait keterampilan adalah...',o:['Kelincahan','Daya tahan jantung-paru','Kekuatan otot dasar','Komposisi tubuh'],a:0,e:'Kelincahan termasuk kebugaran terkait keterampilan (skill-related fitness).'},
-  {q:'Hidrasi saat latihan bertujuan...',o:['Mengganti cairan tubuh yang hilang','Menambah beban','Mempercepat kelelahan','Mengurangi pemanasan'],a:0,e:'Hidrasi mengganti cairan tubuh yang hilang agar performa tetap optimal dan mencegah dehidrasi.'},
-  {q:'Jika merasa pusing/nyeri dada saat latihan, sebaiknya...',o:['Hentikan latihan','Paksakan terus','Tambah intensitas','Abaikan'],a:0,e:'Hentikan latihan dan istirahat; pusing/nyeri dada adalah tanda bahaya.'},
-  // ===== SENAM LANTAI (10) =====
-  {q:'Kunci utama gerakan guling depan adalah...',o:['Dagu menempel dada','Kepala menempel matras','Tangan lurus ke atas','Kaki terbuka lebar'],a:0,e:'Dagu menempel dada agar tengkuk yang menyentuh matras lebih dulu, bukan kepala atas.'},
-  {q:'Urutan bagian tubuh yang menyentuh matras saat guling depan adalah...',o:['Tengkuk → punggung → pinggang → panggul','Kepala → tengkuk → punggung','Punggung → kepala → panggul','Panggul → pinggang → tengkuk'],a:0,e:'Urutan benar: tengkuk → punggung → pinggang → panggul.'},
-  {q:'Saat guling belakang, posisi tangan yang benar adalah...',o:['Di samping telinga','Lurus ke depan','Di atas kepala','Menyilang di dada'],a:0,e:'Tangan di samping telinga untuk mendorong matras saat punggung menyentuh.'},
-  {q:'Tumpuan utama pada sikap lilin adalah...',o:['Bahu dan tengkuk','Leher langsung','Punggung','Kepala'],a:0,e:'Tumpuan pada bahu dan tengkuk, bukan leher langsung (berbahaya).'},
-  {q:'Kesalahan umum handstand adalah...',o:['Siku bengkok','Siku lurus','Tumpuan telapak tangan','Pandangan ke matras'],a:0,e:'Siku bengkok membuat tumpuan tidak stabil; seharusnya siku lurus.'},
-  {q:'Gerakan meroda dilakukan dengan...',o:['Tangan dan kaki melewati garis lurus','Tubuh berputar ke depan','Kedua tangan serentak','Mendarat dengan punggung'],a:0,e:'Meroda (cartwheel): tangan dan kaki bergantian melewati garis lurus menyamping.'},
-  {q:'Loncat harimau diawali dengan...',o:['Awalan beberapa langkah dan tolakan satu kaki','Duduk lalu berguling','Berdiri tegak lalu melompat ke belakang','Berlari mundur'],a:0,e:'Loncat harimau diawali awalan beberapa langkah, tolakan satu kaki, lalu guling depan.'},
-  {q:'Apa fungsi spotting dalam senam lantai?',o:['Memberi bantuan pengamanan saat gerakan','Menambah penilaian','Mempercepat gerakan','Mengganti matras'],a:0,e:'Spotting adalah bantuan pengamanan oleh guru/teman terlatih agar gerakan aman.'},
-  {q:'Sarana utama senam lantai adalah...',o:['Matras','Gawang','Lembing','Net'],a:0,e:'Matras adalah sarana utama senam lantai, harus tebal dan tidak licin.'},
-  {q:'Prinsip keselamatan senam lantai yang benar adalah...',o:['Lakukan dari mudah ke sulit dengan pengawasan','Langsung lakukan gerakan tersulit','Bergerak di luar matras','Tanpa pemanasan'],a:0,e:'Lakukan dari mudah ke sulit, dengan pemanasan dan pengawasan (spotting).'},
-  // ===== SEPAK BOLA (10) =====
-  {q:'Posisi kaki tumpu saat passing yang benar adalah...',o:['Di samping bola, lutut sedikit ditekuk','Jauh di belakang bola','Di atas bola','Menyilang di depan bola'],a:0,e:'Kaki tumpu di samping bola, lutut ditekuk, pandangan ke target.'},
-  {q:'Cara meredam bola saat mengontrol adalah...',o:['Tarik kaki sedikit ke belakang saat kontak','Tendang bola kuat','Biarkan bola memantul','Tutup mata'],a:0,e:'Menarik kaki saat kontak mengurangi pantulan sehingga bola lebih terkontrol.'},
-  {q:'Kesalahan umum saat dribbling adalah...',o:['Kepala terus menunduk','Pandangan ke depan','Bola dekat kaki','Mengubah arah'],a:0,e:'Kepala menunduk membuat pemain kehilangan pandangan lapangan.'},
-  {q:'Perkenaan kaki untuk shooting yang keras adalah...',o:['Punggung kaki','Ujung kaki','Tumit','Lutut'],a:0,e:'Punggung kaki menghasilkan tendangan keras; kaki dalam untuk akurasi.'},
-  {q:'Kontak heading yang benar menggunakan...',o:['Dahi','Wajah','Kepala atas','Leher'],a:0,e:'Heading benar menggunakan dahi, mata ke bola, leher kaku.'},
-  {q:'Formasi 4-4-2 berarti...',o:['4 bek, 4 gelandang, 2 penyerang','4 penyerang, 4 gelandang, 2 bek','4 kiper, 4 bek, 2 gelandang','4 gelandang, 4 penyerang, 2 bek'],a:0,e:'4-4-2 = 4 bek, 4 gelandang, 2 penyerang.'},
-  {q:'Pola permainan menyerang balik cepat disebut...',o:['Counter-attack','Possession','Pressing','Tiki-taka'],a:0,e:'Counter-attack adalah serangan balik cepat setelah merebut bola.'},
-  {q:'Pelindung tulang kering dalam sepak bola disebut...',o:['Shin guard','Rompi','Cone','Sarung tangan'],a:0,e:'Shin guard melindungi tulang kering dari benturan.'},
-  {q:'Tackling yang berbahaya dan harus dihindari adalah...',o:['Tackling dari belakang','Tackling dari depan','Tackling terkontrol','Merebut bola dengan kaki'],a:0,e:'Tackling dari belakang sangat berbahaya dan berisiko cedera serius.'},
-  {q:'Tujuan utama permainan sepak bola adalah...',o:['Memasukkan bola ke gawang lawan sebanyak mungkin','Menahan bola di area sendiri','Menguasai bola tanpa menyerang','Membuat pelanggaran'],a:0,e:'Tujuan sepak bola: mencetak gol ke gawang lawan sebanyak mungkin.'},
-  // ===== LEMPAR LEMBING (10) =====
-  {q:'Gaya pegangan lembing yang menggunakan ibu jari dan telunjuk di ujung lilitan adalah...',o:['Gaya Amerika','Gaya Finlandia','Gaya Penjepit','Gaya Eropa'],a:0,e:'Gaya Amerika: ibu jari & telunjuk di ujung lilitan, kekuatan pada keduanya.'},
-  {q:'Gaya Finlandia menempatkan...',o:['Ibu jari & jari tengah di ujung lilitan','Ibu jari & telunjuk di ujung lilitan','Telunjuk & jari tengah menjepit lembing','Semua jari menggenggam lurus'],a:0,e:'Gaya Finlandia: ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah.'},
-  {q:'Sudut lemparan lembing yang optimal adalah...',o:['30–45 derajat','10–15 derajat','60–75 derajat','90 derajat'],a:0,e:'Sudut optimal sekitar 30–45 derajat untuk jarak maksimal.'},
-  {q:'Berat lembing putra adalah...',o:['800 gram','600 gram','700 gram','900 gram'],a:0,e:'Lembing putra 800 gram (2,60–2,70 m); putri 600 gram (2,20–2,30 m).'},
-  {q:'Panjang lintasan awalan lempar lembing adalah...',o:['30–36,5 m','10–15 m','50–60 m','20–25 m'],a:0,e:'Lintasan awalan lempar lembing panjangnya 30–36,5 m.'},
-  {q:'Lemparan dinyatakan SAH jika...',o:['Mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis','Lembing jatuh di luar sektor','Pelempar melewati garis','Lembing jatuh mendatar'],a:0,e:'Lemparan sah: mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis batas.'},
-  {q:'Cara membawa lembing yang aman adalah...',o:['Vertikal dengan mata lembing ke atas','Diseret di tanah','Horizontal menunjuk orang','Dilempar ke udara'],a:0,e:'Bawa lembing vertikal, mata lembing ke atas, untuk keselamatan.'},
-  {q:'Kesalahan umum dalam lempar lembing adalah...',o:['Melewati garis batas setelah melempar','Follow-through','Awalan teratur','Pegangan kuat'],a:0,e:'Melewati garis batas membuat lemparan dinyatakan gagal.'},
-  {q:'Prinsip keselamatan lempar lembing yang benar adalah...',o:['Semua peserta melempar ke satu arah','Melempar ke segala arah','Ambil lembing saat masih ada lemparan','Bawa lembing menyeret'],a:0,e:'Semua melempar ke satu arah dan area kosong untuk mencegah kecelakaan.'},
-  {q:'Awalan jingkat dalam lempar lembing disebut...',o:['Hop-step','Cross-step','Follow-through','Grip'],a:0,e:'Hop-step adalah awalan jingkat; cross-step adalah awalan silang.'},
-];
-
-/* ============ RENDER QUIZ ============ */
-const quizContainer = document.getElementById('quizContainer');
-let answeredCount = 0;
-let correctCount = 0;
-let score = 0;
-const letters = ['A','B','C','D'];
-
-function renderQuiz(){
-  quizContainer.innerHTML = '';
-  quizData.forEach((item, idx)=>{
-    const card = document.createElement('div');
-    card.className = 'question-card';
-    card.id = `qcard-${idx}`;
-    let optionsHTML = '';
-    item.o.forEach((opt, oi)=>{
-      optionsHTML += `<div class="option" data-q="${idx}" data-o="${oi}">
-        <div class="option-letter">${letters[oi]}</div>
-        <div>${opt}</div>
-      </div>`;
-    });
-    card.innerHTML = `
-      <span class="q-number">Soal ${idx+1}</span>
-      <div class="q-text">${item.q}</div>
-      ${optionsHTML}
-      <div class="explanation" id="exp-${idx}"><strong>Pembahasan:</strong> ${item.e}</div>
-    `;
-    quizContainer.appendChild(card);
-  });
-  document.querySelectorAll('.option').forEach(opt=>{
-    opt.addEventListener('click', handleAnswer);
-  });
-}
-
-function handleAnswer(e){
-  const opt = e.currentTarget;
-  const qIdx = parseInt(opt.dataset.q);
-  const oIdx = parseInt(opt.dataset.o);
-  const card = document.getElementById(`qcard-${qIdx}`);
-  if(card.dataset.answered) return;
-  card.dataset.answered = 'true';
-
-  const correct = quizData[qIdx].a;
-  const options = card.querySelectorAll('.option');
-  options.forEach(o=>o.classList.add('disabled'));
-
-  if(oIdx === correct){
-    opt.classList.add('correct');
-    correctCount++;
-    score += 2.5;
-  } else {
-    opt.classList.add('wrong');
-    options[correct].classList.add('correct');
-  }
-  document.getElementById(`exp-${qIdx}`).classList.add('show');
-  answeredCount++;
-  updateProgress();
-}
-
-function updateProgress(){
-  document.getElementById('qAnswered').textContent = answeredCount;
-  document.getElementById('qCorrect').textContent = correctCount;
-  document.getElementById('qScore').textContent = Math.round(score);
-  document.getElementById('qProgress').style.width = (answeredCount/quizData.length*100)+'%';
-
-  if(answeredCount === quizData.length){
-    showFinal();
-  }
-}
-
-function showFinal(){
-  const panel = document.getElementById('scorePanel');
-  panel.classList.add('show');
-  const finalScore = Math.round(score);
-  document.getElementById('finalScore').textContent = finalScore;
-  let msg = '';
-  if(finalScore >= 90) msg = '🏆 Luar biasa! Kamu sangat siap untuk SAS!';
-  else if(finalScore >= 75) msg = '🎉 Bagus! Tinggal sedikit lagi penguatan.';
-  else if(finalScore >= 60) msg = '💪 Cukup baik. Pelajari kembali pembahasan yang salah.';
-  else msg = '📚 Jangan menyerah! Ulangi materi dan coba lagi.';
-  document.getElementById('finalMsg').textContent = msg;
-  panel.scrollIntoView({behavior:'smooth'});
-}
-
-function resetQuiz(){
-  answeredCount = 0;
-  correctCount = 0;
-  score = 0;
-  document.getElementById('scorePanel').classList.remove('show');
-  renderQuiz();
-  updateProgress();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-renderQuiz();
-updateProgress();
-</script>
-</body>
-</html>
+      <div class="hafalan-body">
+        <div class="hafalan-content">
+          <div class="hafalan-item"><strong>7 Komponen</strong>Daya tahan jantung-paru, kekuatan otot, daya ledak, kecepatan, kelincahan, kelenturan, koordinasi.</div>
+          <div class="hafalan-item"><strong>FITT</strong><span class="hl-key">F</span>requency (frekuensi) • <span class="hl-key">I</span>ntensity (intensitas) • <span class="hl-key">T</span>ime (waktu) • <span class="hl-key">T</span>ype (jenis).</div>
+          <div class="hafalan-item"><strong>Urutan Latihan</strong><span class="hl-key">Pemanasan</span> → Latihan inti → <span class="hl-key">Pendinginan</span>.</div>
+          <div class="hafalan-item"><strong>Prinsip Tambahan</strong>Individual, spesifisitas, overload, reversibility, recovery.</div>
+          <div class="hafalan-item"><
