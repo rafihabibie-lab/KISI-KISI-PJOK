@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahan Ajar SAS PJOK Kelas XI</title>
+<style>
+  :root{
+    --bg:#0f172a; --bg2:#1e293b; --card:#1e293b; --card2:#273449;
+    --accent:#38bdf8; --accent2:#818cf8; --green:#34d399; --red:#f87171;
+    --yellow:#fbbf24; --text:#e2e8f0; --muted:#94a3b8; --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);
+    color:var(--text);line-height:1.7;overflow-x:hidden;
+  }
+  /* ===== HEADER ===== */
+  header{
+    background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#0f172a 100%);
+    padding:60px 20px 40px;text-align:center;position:relative;overflow:hidden;
+  }
+  header::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 20% 30%,rgba(56,189,248,.15),transparent 50%),
+               radial-gradient(circle at 80% 70%,rgba(129,140,248,.15),transparent 50%);
+  }
+  header h1{font-size:clamp(1.6rem,4vw,2.6rem);position:relative;z-index:1;
+    background:linear-gradient(90deg,#38bdf8,#818cf8,#34d399);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  header p{color:var(--muted);position:relative;z-index:1;margin-top:8px;font-size:1.05rem}
+  .badge{display:inline-block;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);
+    color:var(--accent);padding:4px 14px;border-radius:50px;font-size:.8rem;margin-top:14px;position:relative;z-index:1}
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:100;background:rgba(15,23,42,.92);
+    backdrop-filter:blur(12px);border-bottom:1px solid #263449;
+    display:flex;justify-content:center;gap:6px;padding:12px;flex-wrap:wrap;
+  }
+  nav button{
+    background:transparent;border:1px solid #334155;color:var(--muted);
+    padding:8px 16px;border-radius:50px;cursor:pointer;font-size:.85rem;
+    transition:.25s;font-weight:600;
+  }
+  nav button:hover{border-color:var(--accent);color:var(--accent)}
+  nav button.active{background:linear-gradient(135deg,#38bdf8,#818cf8);color:#fff;border-color:transparent}
+  /* ===== SECTIONS ===== */
+  .container{max-width:1000px;margin:0 auto;padding:40px 20px 80px}
+  section{display:none;animation:fade .4s ease}
+  section.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  h2.section-title{font-size:1.6rem;margin-bottom:6px;
+    background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text}
+  .section-sub{color:var(--muted);margin-bottom:28px;font-size:.95rem}
+  /* ===== CARDS ===== */
+  .card{
+    background:var(--card);border:1px solid #2c3e57;border-radius:var(--radius);
+    padding:24px;margin-bottom:20px;transition:.3s;
+  }
+  .card:hover{border-color:#3b5273;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+  .card h3{color:var(--accent);font-size:1.2rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .card h4{color:var(--accent2);margin:16px 0 8px;font-size:1rem}
+  .card ul,.card ol{padding-left:22px;margin:8px 0}
+  .card li{margin-bottom:6px}
+  .tag{display:inline-block;background:rgba(52,211,153,.12);color:var(--green);
+    border:1px solid rgba(52,211,153,.3);padding:2px 10px;border-radius:50px;font-size:.75rem;margin:2px}
+  .warn{background:rgba(248,113,113,.08);border-left:3px solid var(--red);
+    padding:10px 14px;border-radius:8px;margin:10px 0;font-size:.9rem}
+  .tip{background:rgba(56,189,248,.08);border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:8px;margin:10px 0;font-size:.9rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr}}
+  .pill-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  /* ===== RINGKASAN ===== */
+  .ringkas-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
+  .ringkas-table th,.ringkas-table td{border:1px solid #334155;padding:10px;text-align:left;vertical-align:top}
+  .ringkas-table th{background:#1e3a8a55;color:var(--accent)}
+  .ringkas-table tr:nth-child(even){background:#1a2438}
+  .scroll-x{overflow-x:auto}
+  /* ===== FLASHCARD ===== */
+  .fc-controls{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+  .fc-controls select{background:var(--card2);color:var(--text);border:1px solid #334155;
+    padding:8px 14px;border-radius:10px;font-size:.9rem}
+  .fc-counter{color:var(--muted);font-size:.9rem;margin-left:auto}
+  .flashcard-wrap{perspective:1200px;max-width:560px;margin:0 auto 20px;height:320px;cursor:pointer}
+  .flashcard{position:relative;width:100%;height:100%;transition:transform .6s;
+    transform-style:preserve-3d}
+  .flashcard.flipped{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:30px;text-align:center;border:1px solid #334155}
+  .fc-front{background:linear-gradient(135deg,#1e293b,#273449)}
+  .fc-back{background:linear-gradient(135deg,#1e3a8a,#312e81);transform:rotateY(180deg)}
+  .fc-face .fc-label{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;
+    color:var(--accent);margin-bottom:14px}
+  .fc-face .fc-text{font-size:1.15rem;font-weight:600}
+  .fc-back .fc-text{font-size:1rem;font-weight:400;line-height:1.6}
+  .fc-hint{font-size:.8rem;color:var(--muted);margin-top:18px}
+  .fc-nav{display:flex;justify-content:center;gap:12px;margin-top:8px}
+  .btn{background:linear-gradient(135deg,#38bdf8,#818cf8);border:none;color:#fff;
+    padding:10px 22px;border-radius:12px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.25s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,.35)}
+  .btn-ghost{background:transparent;border:1px solid #334155;color:var(--muted)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);box-shadow:none;transform:none}
+  /* ===== QUIZ ===== */
+  .quiz-progress{position:sticky;top:60px;z-index:50;background:rgba(15,23,42,.95);
+    backdrop-filter:blur(8px);padding:12px 16px;border-radius:12px;margin-bottom:20px;
+    border:1px solid #263449}
+  .progress-bar{height:8px;background:#1e293b;border-radius:50px;overflow:hidden;margin-top:8px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#34d399,#38bdf8);
+    width:0%;transition:width .4s;border-radius:50px}
+  .quiz-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted)}
+  .question-card{background:var(--card);border:1px solid #2c3e57;border-radius:var(--radius);
+    padding:24px;margin-bottom:18px}
+  .q-number{display:inline-block;background:rgba(129,140,248,.15);color:var(--accent2);
+    font-size:.75rem;padding:2px 12px;border-radius:50px;margin-bottom:10px;font-weight:700}
+  .q-text{font-size:1.02rem;font-weight:600;margin-bottom:16px}
+  .option{display:flex;gap:12px;align-items:flex-start;background:var(--card2);
+    border:1px solid #334155;border-radius:12px;padding:12px 16px;margin-bottom:10px;
+    cursor:pointer;transition:.2s;font-size:.92rem}
+  .option:hover{border-color:var(--accent);background:#2a3a52}
+  .option.correct{border-color:var(--green);background:rgba(52,211,153,.12)}
+  .option.wrong{border-color:var(--red);background:rgba(248,113,113,.12)}
+  .option.disabled{cursor:default;opacity:.85}
+  .option-letter{width:26px;height:26px;flex-shrink:0;border-radius:50%;
+    background:#334155;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.8rem}
+  .option.correct .option-letter{background:var(--green);color:#052e1b}
+  .option.wrong .option-letter{background:var(--red);color:#450a0a}
+  .explanation{display:none;margin-top:12px;padding:14px;border-radius:12px;
+    background:rgba(56,189,248,.08);border-left:3px solid var(--accent);font-size:.88rem}
+  .explanation.show{display:block;animation:fade .3s}
+  .explanation strong{color:var(--accent)}
+  .score-panel{background:linear-gradient(135deg,#1e3a8a,#312e81);border-radius:20px;
+    padding:36px;text-align:center;margin-top:24px;display:none}
+  .score-panel.show{display:block;animation:fade .5s}
+  .score-big{font-size:3.5rem;font-weight:800;
+    background:linear-gradient(90deg,#34d399,#38bdf8);-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text}
+  .score-msg{color:var(--text);margin:8px 0 20px;font-size:1.05rem}
+  .reset-btn{margin-top:10px}
+  footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:.82rem;
+    border-top:1px solid #1e293b}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎓 Bahan Ajar SAS PJOK Kelas XI</h1>
+  <p>Kebugaran Jasmani • Senam Lantai • Sepak Bola • Lempar Lembing</p>
+  <span class="badge">Analisis Gerakan & Keselamatan Berlatih</span>
+</header>
+
+<nav id="nav">
+  <button class="active" data-target="materi">📚 Materi Detail</button>
+  <button data-target="ringkas">⚡ Kunci Ringkas</button>
+  <button data-target="flashcard">🃏 Flashcard</button>
+  <button data-target="kuis">📝 Kuis (40 Soal)</button>
+</nav>
+
+<div class="container">
+
+<!-- ================= MATERI ================= -->
+<section id="materi" class="active">
+  <h2 class="section-title">Materi Pokok — Pembahasan Detail</h2>
+  <p class="section-sub">Fokus analisis gerakan: urutan/fase, kesalahan umum, sarpras, strategi, dan keselamatan.</p>
+
+  <!-- KEBUGARAN -->
+  <div class="card">
+    <h3>💪 A. Kebugaran Jasmani</h3>
+    <p>Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan dan masih memiliki cadangan energi. Fokus Kelas XI: <strong>kebugaran terkait keterampilan</strong>.</p>
+    <h4>Komponen Utama</h4>
+    <ul>
+      <li><strong>Daya tahan jantung-paru</strong> — lari jarak menengah</li>
+      <li><strong>Kekuatan otot</strong> — push-up, sit-up</li>
+      <li><strong>Daya ledak otot</strong> — lompat jauh, vertical jump</li>
+      <li><strong>Kecepatan</strong> — sprint</li>
+      <li><strong>Kelincahan</strong> — shuttle run</li>
+      <li><strong>Kelenturan</strong> — sit and reach, peregangan</li>
+      <li><strong>Koordinasi</strong> — lompat tali, kombinasi gerak</li>
+    </ul>
+    <h4>Prinsip Latihan (FITT)</h4>
+    <div class="pill-grid">
+      <span class="tag">Frequency — 3–5x/minggu</span>
+      <span class="tag">Intensity — bertahap (overload)</span>
+      <span class="tag">Time — durasi cukup</span>
+      <span class="tag">Type — spesifik tujuan</span>
+    </div>
+    <p style="font-size:.9rem;color:var(--muted)">Prinsip tambahan: individual, spesifisitas, reversibility, recovery.</p>
+    <h4>Urutan Latihan yang Benar</h4>
+    <ol>
+      <li><strong>Pemanasan</strong> (5–10 menit): jogging ringan, mobilisasi sendi, peregangan dinamis.</li>
+      <li><strong>Latihan inti</strong>: sesuai komponen (interval running, plyometric, dll).</li>
+      <li><strong>Pendinginan</strong>: jogging pelan, peregangan statis, pengaturan napas.</li>
+    </ol>
+    <h4>Kesalahan Umum</h4>
+    <div class="warn">❌ Tidak pemanasan → risiko cedera otot/sendi.<br>
+    ❌ Beban naik drastis → cedera & overtraining.<br>
+    ❌ Teknik napas salah saat kekuatan.<br>
+    ❌ Mengabaikan pendinginan → otot kaku.</div>
+    <h4>Keselamatan</h4>
+    <div class="tip">✅ Cek kesehatan, sepatu sesuai, hidrasi cukup, hentikan jika pusing/nyeri dada, permukaan aman.</div>
+    <h4>Sarpras</h4>
+    <p>Stopwatch, cone/marker, matras, tali skipping, mistar loncat, lintasan rata & aman.</p>
+  </div>
+
+  <!-- SENAM LANTAI -->
+  <div class="card">
+    <h3>🤸 B. Senam Lantai</h3>
+    <p>Dilakukan di atas matras, mengandalkan kekuatan, kelenturan, keseimbangan, dan koordinasi. Gerakan uji: guling depan, guling belakang, kayang, sikap lilin, handstand, meroda, loncat harimau.</p>
+    <div class="grid2">
+      <div>
+        <h4>Guling Depan</h4>
+        <ol>
+          <li>Jongkok, tangan menapak matras selebar bahu.</li>
+          <li>Dagu menempel dada, tengkuk menyentuh matras dulu.</li>
+          <li>Berguling: tengkuk → punggung → pinggang → panggul.</li>
+          <li>Akhir jongkok.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Guling Belakang</h4>
+        <ol>
+          <li>Jongkok membelakangi matras, dagu menempel dada.</li>
+          <li>Tolak ke belakang, tangan di samping telinga.</li>
+          <li>Dorong matras, mendarat jongkok.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Kayang</h4>
+        <ol>
+          <li>Berbaring telentang, tekuk lutut, tangan di samping telinga.</li>
+          <li>Angkat badan membentuk busur (tumpuan 2 tangan & 2 kaki).</li>
+          <li>Kepala rileks, pandangan ke belakang.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Sikap Lilin</h4>
+        <ol>
+          <li>Berbaring telentang, angkat kaki lurus ke atas.</li>
+          <li>Topang pinggang dengan kedua tangan.</li>
+          <li>Tumpuan pada bahu & tengkuk, bukan leher langsung.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Handstand</h4>
+        <ol>
+          <li>Bungkuk, tangan di matras selebar bahu.</li>
+          <li>Ayun kaki ke atas hingga tegak lurus terbalik.</li>
+          <li>Siku lurus, tumpuan telapak tangan penuh.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Meroda</h4>
+        <ol>
+          <li>Berdiri menyamping matras.</li>
+          <li>Tangan bergantian menapak, kaki melewati kepala.</li>
+          <li>Mendarat kaki bergantian, tubuh tegak.</li>
+        </ol>
+      </div>
+    </div>
+    <h4>Loncat Harimau</h4>
+    <p>Awalan beberapa langkah → tolakan satu kaki → kedua tangan menapak → dagu menempel dada → berguling ke depan → berdiri tegak.</p>
+    <h4>Kesalahan Umum</h4>
+    <div class="warn">❌ Guling depan: dagu tidak menempel → leher jadi tumpuan (bahaya).<br>
+    ❌ Guling belakang: tangan tidak siap di samping telinga.<br>
+    ❌ Kayang: tangan terlalu jauh → bahu tidak stabil.<br>
+    ❌ Sikap lilin: menopang dengan leher langsung.<br>
+    ❌ Handstand: siku bengkok, tumpuan tidak penuh.<br>
+    ❌ Meroda: tangan & kaki tidak melewati garis lurus.</div>
+    <h4>Sarpras</h4>
+    <p>Matras senam (tebal, tidak licin), ruang cukup, peluit, stopwatch, cone, pakaian lentur.</p>
+    <h4>Keselamatan</h4>
+    <div class="tip">✅ Matras tidak bergeser/licin. ✅ Pemanasan leher, pergelangan, pinggang. ✅ <strong>Spotting</strong> guru/teman terlatih. ✅ Mudah → sulit. ✅ Jangan berguling di luar matras.</div>
+  </div>
+
+  <!-- SEPAK BOLA -->
+  <div class="card">
+    <h3>⚽ C. Sepak Bola</h3>
+    <p>Dua kesebelasan, tujuan memasukkan bola ke gawang lawan. Keterampilan: passing, kontrol, dribbling, shooting, heading.</p>
+    <div class="grid2">
+      <div>
+        <h4>Passing</h4>
+        <ol><li>Pandangan ke target.</li><li>Kaki tumpu di samping bola, lutut ditekuk.</li><li>Kaki tending diayun mengenai bola.</li><li>Follow-through.</li></ol>
+      </div>
+      <div>
+        <h4>Kontrol Bola</h4>
+        <ol><li>Badan membuka, pandangan ke bola.</li><li>Gunakan kaki dalam/telapak/paha/dada.</li><li>Redam bola: tarik kaki saat kontak.</li></ol>
+      </div>
+      <div>
+        <h4>Dribbling</h4>
+        <ol><li>Bola dekat kaki (dalam/luar).</li><li>Pandangan ke depan.</li><li>Ubah arah & kecepatan.</li></ol>
+      </div>
+      <div>
+        <h4>Shooting</h4>
+        <ol><li>Pilih target sudut gawang.</li><li>Kaki tumpu di samping bola.</li><li>Perkenaan punggung kaki (keras) / dalam (akurat).</li><li>Follow-through ke target.</li></ol>
+      </div>
+    </div>
+    <h4>Heading</h4>
+    <p>Mata ke bola, leher kaku, kontak dengan dahi (bukan wajah), badan seimbang.</p>
+    <h4>Strategi Permainan</h4>
+    <ul>
+      <li><strong>Formasi:</strong> 4-4-2, 4-3-3, 3-5-2.</li>
+      <li><strong>Pola:</strong> possession, counter-attack, pressing.</li>
+      <li><strong>Prinsip:</strong> komunikasi, disiplin posisi, transisi cepat, dukungan jarak dekat.</li>
+    </ul>
+    <h4>Kesalahan Umum</h4>
+    <div class="warn">❌ Passing tanpa target. ❌ Kaki tumpu terlalu jauh → tidak akurat. ❌ Dribbling kepala menunduk. ❌ Kontrol kaki kaku → bola memantul. ❌ Shooting ujung kaki → lemah. ❌ Heading pakai wajah/menutup mata.</div>
+    <h4>Sarpras</h4>
+    <p>Lapangan, bola standar, gawang, cone, rompi, peluit, stopwatch, shin guard, sepatu bola.</p>
+    <h4>Keselamatan</h4>
+    <div class="tip">✅ Shin guard. ✅ Pemanasan tungkai & pergelangan. ✅ Tackling terkontrol (tidak dari belakang). ✅ Lapangan bersih. ✅ Hidrasi & hentikan jika cedera.</div>
+  </div>
+
+  <!-- LEMPAR LEMBING -->
+  <div class="card">
+    <h3>🎯 D. Lempar Lembing</h3>
+    <p>Nomor atletik menuntut kecepatan, ketepatan, kekuatan untuk jarak sejauh-jauhnya. Unsur: awalan, lemparan, sikap badan saat melempar, sikap setelah melempar.</p>
+    <h4>Cara Memegang Lembing</h4>
+    <ul>
+      <li><strong>Gaya Amerika:</strong> ibu jari & telunjuk di ujung lilitan.</li>
+      <li><strong>Gaya Finlandia:</strong> ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah.</li>
+      <li><strong>Gaya Penjepit (Tang):</strong> lembing dijepit telunjuk & jari tengah (jarang, kurang kuat).</li>
+    </ul>
+    <h4>Membawa Lembing</h4>
+    <ul>
+      <li><strong>Di atas pundak:</strong> cocok untuk awalan jingkat (hop-step).</li>
+      <li><strong>Di bawah:</strong> lengan lurus ke bawah, mata lembing serong ke atas.</li>
+      <li><strong>Di depan dada:</strong> mata lembing serong ke bawah, ekor melewati pundak kanan.</li>
+    </ul>
+    <h4>Urutan Gerak</h4>
+    <ol>
+      <li><strong>Pegangan</strong> lembing.</li>
+      <li><strong>Awalan</strong>: silang (cross-step) / jingkat (hop-step), irama makin cepat.</li>
+      <li><strong>Gerakan melempar</strong>: tarik lembing, putar pinggul & bahu, lepas di depan atas, sudut 30–45°.</li>
+      <li><strong>Follow-through</strong>: gerakan lanjutan.</li>
+      <li><strong>Sikap setelah melempar</strong>: jaga keseimbangan, jangan lewati garis.</li>
+    </ol>
+    <h4>Peraturan & Ukuran</h4>
+    <ul>
+      <li>Lembing putra: 2,60–2,70 m; 800 gram.</li>
+      <li>Lembing putri: 2,20–2,30 m; 600 gram.</li>
+      <li>Lintasan awalan: 30–36,5 m.</li>
+      <li>Lemparan sah: mata lembing jatuh di sektor lempar, pelempar tidak melewati garis.</li>
+    </ul>
+    <h4>Kesalahan Umum</h4>
+    <div class="warn">❌ Pegangan lemah → lembing goyang. ❌ Awalan tidak teratur/terlalu lambat. ❌ Lempar dari samping/bawah. ❌ Tidak follow-through. ❌ Melewati garis batas. ❌ Lembing dibawa tidak seimbang.</div>
+    <h4>Sarpras</h4>
+    <p>Lembing standar, sektor lempar (garis batas & busur), bendera, meteran, cone, area aman luas.</p>
+    <h4>Keselamatan</h4>
+    <div class="tip">✅ Satu arah lemparan. ✅ Area kosong sebelum melempar. ✅ Bawa lembing vertikal (mata ke atas). ✅ Ambil lembing hanya setelah semua lemparan selesai & diizinkan guru. ✅ Spotter mengawasi. ✅ Pemanasan bahu, lengan, pinggang.</div>
+  </div>
+</section>
+
+<!-- ================= RINGKAS ================= -->
+<section id="ringkas">
+  <h2 class="section-title">Kunci Materi Ringkas</h2>
+  <p class="section-sub">Tabel hafalan cepat — urutan gerak, kesalahan, sarpras, strategi, keselamatan.</p>
+  <div class="card scroll-x">
+    <table class="ringkas-table">
+      <thead>
+        <tr><th>Pokok Bahasan</th><th>Urutan/Fase</th><th>Kesalahan Umum</th><th>Sarpras</th><th>Strategi/Prinsip</th><th>Keselamatan</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Kebugaran Jasmani</strong></td>
+          <td>Pemanasan → inti → pendinginan; FITT</td>
+          <td>Tanpa pemanasan, beban naik drastis, napas salah</td>
+          <td>Stopwatch, cone, matras, tali</td>
+          <td>Progresif, individual, spesifik, recovery</td>
+          <td>Hidrasi, hentikan jika nyeri</td>
+        </tr>
+        <tr>
+          <td><strong>Senam Lantai</strong></td>
+          <td>Guling depan/belakang, kayang, lilin, handstand, meroda, loncat harimau</td>
+          <td>Dagu tidak menempel, leher jadi tumpuan, siku bengkok</td>
+          <td>Matras, ruang, cone</td>
+          <td>Mudah → sulit, spotting</td>
+          <td>Matras tidak licin, spotting wajib</td>
+        </tr>
+        <tr>
+          <td><strong>Sepak Bola</strong></td>
+          <td>Passing, kontrol, dribbling, shooting, heading</td>
+          <td>Kaki tumpu jauh, kepala menunduk, kontak salah</td>
+          <td>Bola, gawang, cone, shin guard</td>
+          <td>Formasi, possession/counter, komunikasi</td>
+          <td>Shin guard, tackling terkontrol</td>
+        </tr>
+        <tr>
+          <td><strong>Lempar Lembing</strong></td>
+          <td>Pegang → bawa → awalan → lempar → follow-through</td>
+          <td>Pegangan lemah, awalan tidak teratur, lewat garis</td>
+          <td>Lembing, sektor, meteran, bendera</td>
+          <td>Irama awalan, sudut 30–45°, seimbang</td>
+          <td>Satu arah, area kosong, bawa vertikal</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🧠 Trik Analisis Gerakan</h3>
+    <p>Untuk setiap teknik, jawab 3 pertanyaan:</p>
+    <ol>
+      <li><strong>Apa fase geraknya?</strong> (awalan → pelaksanaan → follow-through)</li>
+      <li><strong>Di fase mana kesalahan terjadi?</strong></li>
+      <li><strong>Apa dampak & bagaimana perbaikannya?</strong></li>
+    </ol>
+    <div class="tip">Gunakan video gerakan untuk mempertajam analisis. Praktik berpasangan: satu melakukan, satu mengamati & memberi umpan balik.</div>
+  </div>
+</section>
+
+<!-- ================= FLASHCARD ================= -->
+<section id="flashcard">
+  <h2 class="section-title">Flashcard Hafalan</h2>
+  <p class="section-sub">Klik kartu untuk membalik. Pilih kategori atau campur semua.</p>
+
+  <div class="fc-controls">
+    <select id="fcCategory">
+      <option value="all">🔀 Semua Kategori</option>
+      <option value="kebugaran">💪 Kebugaran Jasmani</option>
+      <option value="senam">🤸 Senam Lantai</option>
+      <option value="sepakbola">⚽ Sepak Bola</option>
+      <option value="lembing">🎯 Lempar Lembing</option>
+    </select>
+    <span class="fc-counter" id="fcCounter">1 / 24</span>
+  </div>
+
+  <div class="flashcard-wrap" id="flashcardWrap">
+    <div class="flashcard" id="flashcard">
+      <div class="fc-face fc-front">
+        <div class="fc-label" id="fcCatLabel">Kategori</div>
+        <div class="fc-text" id="fcFront">Pertanyaan muncul di sini</div>
+        <div class="fc-hint">👆 Klik untuk melihat jawaban</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-label">Jawaban</div>
+        <div class="fc-text" id="fcBack">Jawaban muncul di sini</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="btn btn-ghost" id="fcPrev">← Sebelumnya</button>
+    <button class="btn" id="fcFlip">🔄 Balik Kartu</button>
+    <button class="btn btn-ghost" id="fcNext">Selanjutnya →</button>
+  </div>
+</section>
+
+<!-- ================= KUIS ================= -->
+<section id="kuis">
+  <h2 class="section-title">Kuis Interaktif — 40 Soal</h2>
+  <p class="section-sub">Pilih jawaban yang benar. Pembahasan muncul setelah menjawab.</p>
+
+  <div class="quiz-progress">
+    <div class="quiz-meta">
+      <span>Terjawab: <strong id="qAnswered">0</strong> / 40</span>
+      <span>Benar: <strong id="qCorrect" style="color:var(--green)">0</strong></span>
+      <span>Skor: <strong id="qScore" style="color:var(--accent)">0</strong></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="qProgress"></div></div>
+  </div>
+
+  <div id="quizContainer"></div>
+
+  <div class="score-panel" id="scorePanel">
+    <div style="font-size:.85rem;color:var(--accent);letter-spacing:2px">HASIL AKHIR</div>
+    <div class="score-big" id="finalScore">0</div>
+    <div class="score-msg" id="finalMsg"></div>
+    <button class="btn reset-btn" onclick="resetQuiz()">🔄 Ulangi Kuis</button>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Bahan Ajar SAS PJOK Kelas XI SMA • Analisis Gerakan • Dibuat untuk pembelajaran interaktif
+</footer>
+
+<script>
+/* ============ NAVIGATION ============ */
+const navButtons = document.querySelectorAll('#nav button');
+const sections = document.querySelectorAll('section');
+navButtons.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    navButtons.forEach(b=>b.classList.remove('active'));
+    sections.forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ============ FLASHCARD DATA ============ */
+const flashcards = [
+  // Kebugaran (6)
+  {cat:'kebugaran',q:'Apa itu kebugaran jasmani?',a:'Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan dan masih memiliki cadangan energi.'},
+  {cat:'kebugaran',q:'Sebutkan komponen kebugaran terkait keterampilan!',a:'Daya tahan jantung-paru, kekuatan otot, daya ledak, kecepatan, kelincahan, kelenturan, koordinasi.'},
+  {cat:'kebugaran',q:'Apa kepanjangan FITT?',a:'Frequency, Intensity, Time, Type — prinsip dasar penyusunan program latihan.'},
+  {cat:'kebugaran',q:'Urutan latihan yang benar?',a:'Pemanasan (5–10 menit) → Latihan inti → Pendinginan.'},
+  {cat:'kebugaran',q:'Apa itu prinsip overload?',a:'Beban/intensitas latihan ditingkatkan secara bertahap agar tubuh beradaptasi.'},
+  {cat:'kebugaran',q:'Apa itu reversibility?',a:'Kebugaran akan menurun jika latihan berhenti — "use it or lose it".'},
+  // Senam (6)
+  {cat:'senam',q:'Kunci gerakan guling depan?',a:'Dagu menempel dada, tengkuk menyentuh matras lebih dulu (bukan kepala atas).'},
+  {cat:'senam',q:'Urutan berguling pada guling depan?',a:'Tengkuk → punggung → pinggang → panggul → jongkok.'},
+  {cat:'senam',q:'Posisi tangan saat guling belakang?',a:'Di samping telinga, siap mendorong matras saat punggung menyentuh.'},
+  {cat:'senam',q:'Tumpuan sikap lilin yang benar?',a:'Bahu dan tengkuk (bukan leher langsung), pinggang ditopang kedua tangan.'},
+  {cat:'senam',q:'Kesalahan handstand?',a:'Siku bengkok dan tumpuan tidak di telapak tangan penuh.'},
+  {cat:'senam',q:'Apa itu spotting?',a:'Bantuan pengawasan/pengamanan oleh guru atau teman terlatih saat melakukan gerakan senam.'},
+  // Sepak bola (6)
+  {cat:'sepakbola',q:'Posisi kaki tumpu saat passing?',a:'Di samping bola, lutut sedikit ditekuk, pandangan ke target.'},
+  {cat:'sepakbola',q:'Cara meredam bola saat kontrol?',a:'Tarik kaki sedikit ke belakang saat kontak bola untuk mengurangi pantulan.'},
+  {cat:'sepakbola',q:'Kesalahan dribbling?',a:'Kepala terus menunduk melihat bola → kehilangan pandangan lapangan.'},
+  {cat:'sepakbola',q:'Perkenaan kaki untuk shooting keras?',a:'Punggung kaki (power), sedangkan kaki dalam untuk akurasi.'},
+  {cat:'sepakbola',q:'Kontak heading yang benar?',a:'Dahi, mata ke bola, leher kaku, badan seimbang.'},
+  {cat:'sepakbola',q:'Sebutkan formasi sepak bola!',a:'4-4-2, 4-3-3, 3-5-2 (sesuaikan kekuatan tim).'},
+  // Lembing (6)
+  {cat:'lembing',q:'Gaya pegangan lembing?',a:'Gaya Amerika, Gaya Finlandia, Gaya Penjepit (Tang).'},
+  {cat:'lembing',q:'Ciri Gaya Amerika?',a:'Ibu jari & telunjuk di ujung lilitan; kekuatan pada telunjuk & ibu jari.'},
+  {cat:'lembing',q:'Ciri Gaya Finlandia?',a:'Ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah; kekuatan pada ibu jari & jari tengah.'},
+  {cat:'lembing',q:'Sudut lemparan lembing yang optimal?',a:'Sekitar 30–45 derajat.'},
+  {cat:'lembing',q:'Berat lembing putra & putri?',a:'Putra 800 gram (2,60–2,70 m), putri 600 gram (2,20–2,30 m).'},
+  {cat:'lembing',q:'Syarat lemparan sah?',a:'Mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis batas.'},
+];
+
+let fcFiltered = [...flashcards];
+let fcIndex = 0;
+
+const fcEl = document.getElementById('flashcard');
+const fcFront = document.getElementById('fcFront');
+const fcBack = document.getElementById('fcBack');
+const fcCatLabel = document.getElementById('fcCatLabel');
+const fcCounter = document.getElementById('fcCounter');
+const catNames = {kebugaran:'Kebugaran Jasmani',senam:'Senam Lantai',sepakbola:'Sepak Bola',lembing:'Lempar Lembing'};
+
+function renderFlashcard(){
+  const c = fcFiltered[fcIndex];
+  fcCatLabel.textContent = catNames[c.cat];
+  fcFront.textContent = c.q;
+  fcBack.textContent = c.a;
+  fcCounter.textContent = `${fcIndex+1} / ${fcFiltered.length}`;
+  fcEl.classList.remove('flipped');
+}
+function nextCard(){fcIndex=(fcIndex+1)%fcFiltered.length;renderFlashcard();}
+function prevCard(){fcIndex=(fcIndex-1+fcFiltered.length)%fcFiltered.length;renderFlashcard();}
+
+document.getElementById('fcFlip').addEventListener('click',()=>fcEl.classList.toggle('flipped'));
+fcEl.addEventListener('click',()=>fcEl.classList.toggle('flipped'));
+document.getElementById('fcNext').addEventListener('click',nextCard);
+document.getElementById('fcPrev').addEventListener('click',prevCard);
+document.getElementById('fcCategory').addEventListener('change',e=>{
+  const v=e.target.value;
+  fcFiltered = v==='all'?[...flashcards]:flashcards.filter(f=>f.cat===v);
+  fcIndex=0;renderFlashcard();
+});
+renderFlashcard();
+
+/* ============ QUIZ DATA (40 SOAL) ============ */
+const quizData = [
+  // ===== KEBUGARAN (10) =====
+  {q:'Kemampuan tubuh melakukan aktivitas sehari-hari tanpa kelelahan berlebihan disebut...',o:['Kebugaran jasmani','Kekuatan otot','Kelincahan','Daya tahan'],a:0,e:'Kebugaran jasmani adalah kemampuan tubuh beraktivitas tanpa kelelahan berlebihan dan masih punya cadangan energi.'},
+  {q:'Prinsip latihan FITT terdiri dari...',o:['Frequency, Intensity, Time, Type','Force, Intensity, Time, Type','Frequency, Individual, Time, Type','Flexibility, Intensity, Training, Type'],a:0,e:'FITT = Frequency (frekuensi), Intensity (intensitas), Time (waktu), Type (jenis latihan).'},
+  {q:'Latihan shuttle run bertujuan melatih...',o:['Kelincahan','Kelenturan','Daya tahan jantung','Kekuatan otot'],a:0,e:'Shuttle run (lari bolak-balik) melatih kelincahan (agility).'},
+  {q:'Urutan latihan yang benar adalah...',o:['Pemanasan → latihan inti → pendinginan','Latihan inti → pemanasan → pendinginan','Pendinginan → pemanasan → inti','Pemanasan → pendinginan → inti'],a:0,e:'Urutan benar: pemanasan → latihan inti → pendinginan.'},
+  {q:'Berikut yang BUKAN kesalahan umum dalam latihan kebugaran adalah...',o:['Melakukan pemanasan sebelum latihan','Beban naik drastis','Tanpa pendinginan','Napas ditahan berlebihan'],a:0,e:'Pemanasan adalah hal yang BENAR dilakukan, bukan kesalahan.'},
+  {q:'Prinsip yang menyatakan kebugaran menurun jika berhenti latihan adalah...',o:['Reversibility','Overload','Spesifisitas','Individual'],a:0,e:'Reversibility: kebugaran menurun jika latihan berhenti (use it or lose it).'},
+  {q:'Tes sit and reach mengukur...',o:['Kelenturan','Kecepatan','Kekuatan','Daya tahan'],a:0,e:'Sit and reach mengukur kelenturan (flexibility) otot punggung dan hamstring.'},
+  {q:'Berikut yang termasuk kebugaran terkait keterampilan adalah...',o:['Kelincahan','Daya tahan jantung-paru','Kekuatan otot dasar','Komposisi tubuh'],a:0,e:'Kelincahan termasuk kebugaran terkait keterampilan (skill-related fitness).'},
+  {q:'Hidrasi saat latihan bertujuan...',o:['Mengganti cairan tubuh yang hilang','Menambah beban','Mempercepat kelelahan','Mengurangi pemanasan'],a:0,e:'Hidrasi mengganti cairan tubuh yang hilang agar performa tetap optimal dan mencegah dehidrasi.'},
+  {q:'Jika merasa pusing/nyeri dada saat latihan, sebaiknya...',o:['Hentikan latihan','Paksakan terus','Tambah intensitas','Abaikan'],a:0,e:'Hentikan latihan dan istirahat; pusing/nyeri dada adalah tanda bahaya.'},
+  // ===== SENAM LANTAI (10) =====
+  {q:'Kunci utama gerakan guling depan adalah...',o:['Dagu menempel dada','Kepala menempel matras','Tangan lurus ke atas','Kaki terbuka lebar'],a:0,e:'Dagu menempel dada agar tengkuk yang menyentuh matras lebih dulu, bukan kepala atas.'},
+  {q:'Urutan bagian tubuh yang menyentuh matras saat guling depan adalah...',o:['Tengkuk → punggung → pinggang → panggul','Kepala → tengkuk → punggung','Punggung → kepala → panggul','Panggul → pinggang → tengkuk'],a:0,e:'Urutan benar: tengkuk → punggung → pinggang → panggul.'},
+  {q:'Saat guling belakang, posisi tangan yang benar adalah...',o:['Di samping telinga','Lurus ke depan','Di atas kepala','Menyilang di dada'],a:0,e:'Tangan di samping telinga untuk mendorong matras saat punggung menyentuh.'},
+  {q:'Tumpuan utama pada sikap lilin adalah...',o:['Bahu dan tengkuk','Leher langsung','Punggung','Kepala'],a:0,e:'Tumpuan pada bahu dan tengkuk, bukan leher langsung (berbahaya).'},
+  {q:'Kesalahan umum handstand adalah...',o:['Siku bengkok','Siku lurus','Tumpuan telapak tangan','Pandangan ke matras'],a:0,e:'Siku bengkok membuat tumpuan tidak stabil; seharusnya siku lurus.'},
+  {q:'Gerakan meroda dilakukan dengan...',o:['Tangan dan kaki melewati garis lurus','Tubuh berputar ke depan','Kedua tangan serentak','Mendarat dengan punggung'],a:0,e:'Meroda (cartwheel): tangan dan kaki bergantian melewati garis lurus menyamping.'},
+  {q:'Loncat harimau diawali dengan...',o:['Awalan beberapa langkah dan tolakan satu kaki','Duduk lalu berguling','Berdiri tegak lalu melompat ke belakang','Berlari mundur'],a:0,e:'Loncat harimau diawali awalan beberapa langkah, tolakan satu kaki, lalu guling depan.'},
+  {q:'Apa fungsi spotting dalam senam lantai?',o:['Memberi bantuan pengamanan saat gerakan','Menambah penilaian','Mempercepat gerakan','Mengganti matras'],a:0,e:'Spotting adalah bantuan pengamanan oleh guru/teman terlatih agar gerakan aman.'},
+  {q:'Sarana utama senam lantai adalah...',o:['Matras','Gawang','Lembing','Net'],a:0,e:'Matras adalah sarana utama senam lantai, harus tebal dan tidak licin.'},
+  {q:'Prinsip keselamatan senam lantai yang benar adalah...',o:['Lakukan dari mudah ke sulit dengan pengawasan','Langsung lakukan gerakan tersulit','Bergerak di luar matras','Tanpa pemanasan'],a:0,e:'Lakukan dari mudah ke sulit, dengan pemanasan dan pengawasan (spotting).'},
+  // ===== SEPAK BOLA (10) =====
+  {q:'Posisi kaki tumpu saat passing yang benar adalah...',o:['Di samping bola, lutut sedikit ditekuk','Jauh di belakang bola','Di atas bola','Menyilang di depan bola'],a:0,e:'Kaki tumpu di samping bola, lutut ditekuk, pandangan ke target.'},
+  {q:'Cara meredam bola saat mengontrol adalah...',o:['Tarik kaki sedikit ke belakang saat kontak','Tendang bola kuat','Biarkan bola memantul','Tutup mata'],a:0,e:'Menarik kaki saat kontak mengurangi pantulan sehingga bola lebih terkontrol.'},
+  {q:'Kesalahan umum saat dribbling adalah...',o:['Kepala terus menunduk','Pandangan ke depan','Bola dekat kaki','Mengubah arah'],a:0,e:'Kepala menunduk membuat pemain kehilangan pandangan lapangan.'},
+  {q:'Perkenaan kaki untuk shooting yang keras adalah...',o:['Punggung kaki','Ujung kaki','Tumit','Lutut'],a:0,e:'Punggung kaki menghasilkan tendangan keras; kaki dalam untuk akurasi.'},
+  {q:'Kontak heading yang benar menggunakan...',o:['Dahi','Wajah','Kepala atas','Leher'],a:0,e:'Heading benar menggunakan dahi, mata ke bola, leher kaku.'},
+  {q:'Formasi 4-4-2 berarti...',o:['4 bek, 4 gelandang, 2 penyerang','4 penyerang, 4 gelandang, 2 bek','4 kiper, 4 bek, 2 gelandang','4 gelandang, 4 penyerang, 2 bek'],a:0,e:'4-4-2 = 4 bek, 4 gelandang, 2 penyerang.'},
+  {q:'Pola permainan menyerang balik cepat disebut...',o:['Counter-attack','Possession','Pressing','Tiki-taka'],a:0,e:'Counter-attack adalah serangan balik cepat setelah merebut bola.'},
+  {q:'Pelindung tulang kering dalam sepak bola disebut...',o:['Shin guard','Rompi','Cone','Sarung tangan'],a:0,e:'Shin guard melindungi tulang kering dari benturan.'},
+  {q:'Tackling yang berbahaya dan harus dihindari adalah...',o:['Tackling dari belakang','Tackling dari depan','Tackling terkontrol','Merebut bola dengan kaki'],a:0,e:'Tackling dari belakang sangat berbahaya dan berisiko cedera serius.'},
+  {q:'Tujuan utama permainan sepak bola adalah...',o:['Memasukkan bola ke gawang lawan sebanyak mungkin','Menahan bola di area sendiri','Menguasai bola tanpa menyerang','Membuat pelanggaran'],a:0,e:'Tujuan sepak bola: mencetak gol ke gawang lawan sebanyak mungkin.'},
+  // ===== LEMPAR LEMBING (10) =====
+  {q:'Gaya pegangan lembing yang menggunakan ibu jari dan telunjuk di ujung lilitan adalah...',o:['Gaya Amerika','Gaya Finlandia','Gaya Penjepit','Gaya Eropa'],a:0,e:'Gaya Amerika: ibu jari & telunjuk di ujung lilitan, kekuatan pada keduanya.'},
+  {q:'Gaya Finlandia menempatkan...',o:['Ibu jari & jari tengah di ujung lilitan','Ibu jari & telunjuk di ujung lilitan','Telunjuk & jari tengah menjepit lembing','Semua jari menggenggam lurus'],a:0,e:'Gaya Finlandia: ibu jari & jari tengah di ujung lilitan, telunjuk lurus di bawah.'},
+  {q:'Sudut lemparan lembing yang optimal adalah...',o:['30–45 derajat','10–15 derajat','60–75 derajat','90 derajat'],a:0,e:'Sudut optimal sekitar 30–45 derajat untuk jarak maksimal.'},
+  {q:'Berat lembing putra adalah...',o:['800 gram','600 gram','700 gram','900 gram'],a:0,e:'Lembing putra 800 gram (2,60–2,70 m); putri 600 gram (2,20–2,30 m).'},
+  {q:'Panjang lintasan awalan lempar lembing adalah...',o:['30–36,5 m','10–15 m','50–60 m','20–25 m'],a:0,e:'Lintasan awalan lempar lembing panjangnya 30–36,5 m.'},
+  {q:'Lemparan dinyatakan SAH jika...',o:['Mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis','Lembing jatuh di luar sektor','Pelempar melewati garis','Lembing jatuh mendatar'],a:0,e:'Lemparan sah: mata lembing jatuh di sektor lempar dan pelempar tidak melewati garis batas.'},
+  {q:'Cara membawa lembing yang aman adalah...',o:['Vertikal dengan mata lembing ke atas','Diseret di tanah','Horizontal menunjuk orang','Dilempar ke udara'],a:0,e:'Bawa lembing vertikal, mata lembing ke atas, untuk keselamatan.'},
+  {q:'Kesalahan umum dalam lempar lembing adalah...',o:['Melewati garis batas setelah melempar','Follow-through','Awalan teratur','Pegangan kuat'],a:0,e:'Melewati garis batas membuat lemparan dinyatakan gagal.'},
+  {q:'Prinsip keselamatan lempar lembing yang benar adalah...',o:['Semua peserta melempar ke satu arah','Melempar ke segala arah','Ambil lembing saat masih ada lemparan','Bawa lembing menyeret'],a:0,e:'Semua melempar ke satu arah dan area kosong untuk mencegah kecelakaan.'},
+  {q:'Awalan jingkat dalam lempar lembing disebut...',o:['Hop-step','Cross-step','Follow-through','Grip'],a:0,e:'Hop-step adalah awalan jingkat; cross-step adalah awalan silang.'},
+];
+
+/* ============ RENDER QUIZ ============ */
+const quizContainer = document.getElementById('quizContainer');
+let answeredCount = 0;
+let correctCount = 0;
+let score = 0;
+const letters = ['A','B','C','D'];
+
+function renderQuiz(){
+  quizContainer.innerHTML = '';
+  quizData.forEach((item, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `qcard-${idx}`;
+    let optionsHTML = '';
+    item.o.forEach((opt, oi)=>{
+      optionsHTML += `<div class="option" data-q="${idx}" data-o="${oi}">
+        <div class="option-letter">${letters[oi]}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    card.innerHTML = `
+      <span class="q-number">Soal ${idx+1}</span>
+      <div class="q-text">${item.q}</div>
+      ${optionsHTML}
+      <div class="explanation" id="exp-${idx}"><strong>Pembahasan:</strong> ${item.e}</div>
+    `;
+    quizContainer.appendChild(card);
+  });
+  document.querySelectorAll('.option').forEach(opt=>{
+    opt.addEventListener('click', handleAnswer);
+  });
+}
+
+function handleAnswer(e){
+  const opt = e.currentTarget;
+  const qIdx = parseInt(opt.dataset.q);
+  const oIdx = parseInt(opt.dataset.o);
+  const card = document.getElementById(`qcard-${qIdx}`);
+  if(card.dataset.answered) return;
+  card.dataset.answered = 'true';
+
+  const correct = quizData[qIdx].a;
+  const options = card.querySelectorAll('.option');
+  options.forEach(o=>o.classList.add('disabled'));
+
+  if(oIdx === correct){
+    opt.classList.add('correct');
+    correctCount++;
+    score += 2.5; // 40 soal x 2.5 = 100
+  } else {
+    opt.classList.add('wrong');
+    options[correct].classList.add('correct');
+  }
+  document.getElementById(`exp-${qIdx}`).classList.add('show');
+  answeredCount++;
+  updateProgress();
+}
+
+function updateProgress(){
+  document.getElementById('qAnswered').textContent = answeredCount;
+  document.getElementById('qCorrect').textContent = correctCount;
+  document.getElementById('qScore').textContent = Math.round(score);
+  document.getElementById('qProgress').style.width = (answeredCount/quizData.length*100)+'%';
+
+  if(answeredCount === quizData.length){
+    showFinal();
+  }
+}
+
+function showFinal(){
+  const panel = document.getElementById('scorePanel');
+  panel.classList.add('show');
+  const finalScore = Math.round(score);
+  document.getElementById('finalScore').textContent = finalScore;
+  let msg = '';
+  if(finalScore >= 90) msg = '🏆 Luar biasa! Kamu sangat siap untuk SAS!';
+  else if(finalScore >= 75) msg = '🎉 Bagus! Tinggal sedikit lagi penguatan.';
+  else if(finalScore >= 60) msg = '💪 Cukup baik. Pelajari kembali pembahasan yang salah.';
+  else msg = '📚 Jangan menyerah! Ulangi materi dan coba lagi.';
+  document.getElementById('finalMsg').textContent = msg;
+  panel.scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  answeredCount = 0;
+  correctCount = 0;
+  score = 0;
+  document.getElementById('scorePanel').classList.remove('show');
+  renderQuiz();
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderQuiz();
+updateProgress();
+</script>
+</body>
+</html>
